@@ -5,39 +5,43 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
   <script>
-    // Replace this with your actual Firebase config 👇
     const firebaseConfig = {
       apiKey: "AIzaSyBThA39wxsrqFnyBkd53MhsMBySssrdcQk",
       authDomain: "yaas-auth-13878.firebaseapp.com",
       projectId: "yaas-auth-13878",
-      storageBucket: "yaas-auth-13878.firebasestorage.app",
+      storageBucket: "yaas-auth-13878.appspot.com",
       messagingSenderId: "836853137520",
-      appId: "1:836853137520:web:33f713648877708fb0f4b5",
-      measurementId: "G-7X0EN411GP"
+      appId: "1:836853137520:web:33f713648877708fb0f4b5"
     };
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    const provider = new firebase.auth.GoogleAuthProvider();
 
     function login() {
-      const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
           const email = result.user.email;
           if (email.endsWith("@yaas.studio")) {
-            window.location.href = "https://yaas-wiki.super.site/"; // ✅ your Notion/Super.so link
+            window.location.href = "https://yaas-wiki.super.site/";
           } else {
-            document.body.innerHTML = "<h2>Access Denied</h2><p>This site is only for yaas.studio users.</p>";
+            document.body.innerHTML = `
+              <h2>Access Denied</h2>
+              <p>This site is only for <strong>@yaas.studio</strong> email addresses.</p>
+            `;
           }
         })
         .catch((error) => {
-          console.error("Login failed:", error);
-          alert("Login failed. Check console.");
+          console.error("Login error:", error);
+          alert("Google Sign-In failed. Check your browser console for more details.");
         });
     }
   </script>
 </head>
-<body style="text-align: center; margin-top: 100px;">
+<body style="text-align: center; margin-top: 100px; font-family: sans-serif;">
   <h1>Login to YAAS Wiki</h1>
-  <button onclick="login()" style="padding: 10px 20px; font-size: 18px;">Sign in with Google</button>
+  <button onclick="login()" style="padding: 12px 24px; font-size: 16px; cursor: pointer;">
+    Sign in with Google
+  </button>
 </body>
 </html>
