@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Login to YAAS Wiki</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
-  <script>
+</head>
+<body style="text-align: center; margin-top: 100px; font-family: sans-serif;">
+  <h1>Login to YAAS Wiki</h1>
+  <button onclick="login()" style="padding: 12px 24px; font-size: 16px; cursor: pointer;">
+    Sign in with Google
+  </button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyBThA39wxsrqFnyBkd53MhsMBySssrdcQk",
       authDomain: "yaas-auth-13878.firebaseapp.com",
@@ -14,34 +23,28 @@
       appId: "1:836853137520:web:33f713648877708fb0f4b5"
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    function login() {
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          const email = result.user.email;
-          if (email.endsWith("@yaas.studio")) {
-            window.location.href = "https://yaas-wiki.super.site/";
-          } else {
-            document.body.innerHTML = `
-              <h2>Access Denied</h2>
-              <p>This site is only for <strong>@yaas.studio</strong> email addresses.</p>
-            `;
-          }
-        })
-        .catch((error) => {
-          console.error("Login error:", error);
-          alert("Google Sign-In failed. Check your browser console for more details.");
-        });
-    }
+    window.login = async function () {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const email = result.user.email;
+
+        if (email.endsWith("@yaas.studio")) {
+          window.location.href = "https://yaas-wiki.super.site/";
+        } else {
+          document.body.innerHTML = `
+            <h2>Access Denied</h2>
+            <p>This site is only for <strong>@yaas.studio</strong> email addresses.</p>
+          `;
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("Google Sign-In failed.");
+      }
+    };
   </script>
-</head>
-<body style="text-align: center; margin-top: 100px; font-family: sans-serif;">
-  <h1>Login to YAAS Wiki</h1>
-  <button onclick="login()" style="padding: 12px 24px; font-size: 16px; cursor: pointer;">
-    Sign in with Google
-  </button>
 </body>
 </html>
