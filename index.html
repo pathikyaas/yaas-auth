@@ -1,3 +1,24 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBThA39wxsrqFnyBkd53MhsMBySssrdcQk",
+  authDomain: "yaas-auth-13878.firebaseapp.com",
+  projectId: "yaas-auth-13878",
+  storageBucket: "yaas-auth-13878.firebasestorage.app",
+  messagingSenderId: "836853137520",
+  appId: "1:836853137520:web:33f713648877708fb0f4b5",
+  measurementId: "G-7X0EN411GP"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 <!DOCTYPE html>
 <html>
@@ -6,31 +27,39 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
   <script>
-    // Your Firebase config
+    // Replace this with your actual Firebase config 👇
     const firebaseConfig = {
       apiKey: "AIzaSyBThA39wxsrqFnyBkd53MhsMBySssrdcQk",
       authDomain: "yaas-auth-13878.firebaseapp.com",
-      projectId: "yaas-auth-13878"
+      projectId: "yaas-auth-13878",
+      storageBucket: "yaas-auth-13878.firebasestorage.app",
+      messagingSenderId: "836853137520",
+      appId: "1:836853137520:web:33f713648877708fb0f4b5",
+      measurementId: "G-7X0EN411GP"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
     function login() {
       const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then((result) => {
-        const email = result.user.email;
-        if (email.endsWith("@yaas.studio")) {
-          window.location.href = "https://wiki.yaas.studio"; // your Notion/Super.so page
-        } else {
-          document.body.innerHTML = "<h2>Access Denied</h2><p>This site is only for yaas.studio users.</p>";
-        }
-      });
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          const email = result.user.email;
+          if (email.endsWith("@yaas.studio")) {
+            window.location.href = "https://yaas-wiki.super.site/"; // ✅ your Notion/Super.so link
+          } else {
+            document.body.innerHTML = "<h2>Access Denied</h2><p>This site is only for yaas.studio users.</p>";
+          }
+        })
+        .catch((error) => {
+          console.error("Login failed:", error);
+          alert("Login failed. Check console.");
+        });
     }
   </script>
 </head>
-<body style="text-align:center; margin-top:100px;">
+<body style="text-align: center; margin-top: 100px;">
   <h1>Login to YAAS Wiki</h1>
-  <button onclick="login()" style="padding:10px 20px; font-size:18px;">Sign in with Google</button>
+  <button onclick="login()" style="padding: 10px 20px; font-size: 18px;">Sign in with Google</button>
 </body>
 </html>
